@@ -1,9 +1,12 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {EscrowContext} from '../context/EscrowContext';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function CreateService() {
     const context = useContext(EscrowContext);
+    const navigate = useNavigate();
+
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [funds, setFunds] = useState(0);
@@ -13,6 +16,16 @@ export default function CreateService() {
         e.preventDefault();
         context.newService({name, description, funds, actionTypes});
     }
+
+    useEffect(() => {
+        console.log("IUE");
+        if(context.createServiceStatus == "completed"){
+            console.log("completed");
+            context.setCreateServiceStatus("not-started");
+            navigate(-1);
+
+        }
+    }, [context.createServiceStatus])
 
      return <div className="createService">
     <h1>Create A New Service</h1>
@@ -49,7 +62,9 @@ export default function CreateService() {
             </div>
         </div>
         <br/>
-        <button type="submit" className="createServiceBtn">Create Service</button>
+        <button type="submit" className="createServiceBtn" disabled = {context.createServiceStatus != "not-started"}>
+            { context.createServiceStatus == "not-started" ? "Create Service" : "Loading..." }
+        </button>
     </form>
 </div>
 

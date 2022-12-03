@@ -8,15 +8,14 @@ export function getServices(){
     const config = {
         headers: { Authorization: `Bearer ${getToken()}` }
     };    
-    console.log('config - ', config);
     return Api.get('/services', config);
 }
 
 export function createService({name, description, funds, actionTypes}){
     const config = {
-        headers: { Authorization: `Bearer ${getToken()}` }
+        headers: { Authorization: `Bearer ${getToken()}`, 'Content-Type': 'application/json' }
     };
     
-    return Api.put('/services',{'name':name, 'description':description, 'lockinFunds':funds, 'subscriberAction':actionTypes}, config)
+    return Api.put('/services',{'name':name, 'description':description, 'lockinFunds': parseInt(funds) , 'subscriberAction':actionTypes}, config)
 }
 

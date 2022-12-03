@@ -11,6 +11,7 @@ export const TransactionProvider = ({children}) => {
     const [provider, setProvider] = useState(null);
     const [smartAccount, setSmartAccount] = useState('0x');
     const [services, setServices] = useState([]); 
+    const [createServiceStatus, setCreateServiceStatus] = useState("not-started"); 
     const [alert, setAlert] = useState({
         'show' : false,
         'message' : '',
@@ -73,12 +74,16 @@ export const TransactionProvider = ({children}) => {
     }
 
     const loadServices = async () => {
-        setServices(await getServices());
+        let services = await getServices();
+        console.log("s - ", services);        
+        setServices(services.data);
     };
 
     const newService = async ({name, description, funds, actionTypes}) => {
-        await createService(name, description, funds, actionTypes);
+        setCreateServiceStatus("started");
+        await createService({name, description, funds, actionTypes});
         await loadServices();
+        setCreateServiceStatus("completed");
     }
 
     const logout = async () => {
@@ -118,7 +123,7 @@ export const TransactionProvider = ({children}) => {
     
     return (
         <EscrowContext.Provider value={{loginWithBiconomy, smartAccount ,setAlert, alert, 
-         isWalletConnected, socialLoginSDK, logout, getUserInfo, newService}}>
+         isWalletConnected, socialLoginSDK, logout, getUserInfo, newService, createServiceStatus, setCreateServiceStatus}}>
             {children}
         </EscrowContext.Provider>
     );

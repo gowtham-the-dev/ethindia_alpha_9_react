@@ -6,10 +6,13 @@ import { useNavigate } from 'react-router-dom';
 function ListServices () {
     const context = useContext(EscrowContext);
     const navigate = useNavigate();
-
     const createNewService = () => {
         navigate("/services/new");
     }
+
+    useEffect(() => {
+        console.log("services", context.services);
+    }, [context.services])
 
     return <div>
         <button className="newServiceBtn" onClick={createNewService}>Create A New Service</button>
