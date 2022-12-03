@@ -1,81 +1,119 @@
 import { createContext, useState, useEffect } from "react";
+import SocialLogin from "@biconomy/web3-auth";
 import {ethers} from 'ethers';
+import { createService, getServices } from "../services/Services";
 
-export const AuthContext = createContext();
+export const EscrowContext = createContext();
 
 export const TransactionProvider = ({children}) => {
 
-    const [currentAccount, setCurrentAccount] = useState('0x');
-    const [tasks, setTasks] = useState([]);  
-    
-    const getProvider = () => {
-        if(!ethereum) return;
-        return new ethers.providers.Web3Provider(ethereum);
+    const [socialLoginSDK, setSocialLoginSDK] = useState(null);
+    const [provider, setProvider] = useState(null);
+    const [smartAccount, setSmartAccount] = useState('0x');
+    const [services, setServices] = useState([]); 
+    const [alert, setAlert] = useState({
+        'show' : false,
+        'message' : '',
+        'status' : '',
+    });
+    const [userInfo, setUserInfo] = useState();
+
+    const initSDK = async () => {
+        const socialLoginSDK = new SocialLogin();
+        await socialLoginSDK.init('0x13881');
+        setSocialLoginSDK(socialLoginSDK);
     }
-    
-    const getConnectedAccount = async () => {
-        const accounts = await ethereum.request({method: 'eth_accounts'})
-        setCurrentAccount(accounts.length ? accounts[0] : '0x');
-    }
-    
-    const connectToWallet = async () => {
-        try{
-            const accounts = await ethereum.request({ method : 'eth_requestAccounts' })
-            setCurrentAccount(accounts.length ? accounts[0] : '0x');
+
+    const loginWithBiconomy = async () => {
+        try {
+            socialLoginSDK.showConnectModal();
+            socialLoginSDK.showWallet();
+        
+            if (!socialLoginSDK?.web3auth?.provider) return;
+
+            console.log("Login with BICO");
+            const provider = new ethers.providers.Web3Provider(
+                socialLoginSDK.web3auth.provider,
+            );
+            const accounts = await provider.listAccounts();    
+            socialLoginSDK.hideWallet();
+            setSmartAccount(accounts.length ? accounts[0] : '0x');
             setAlert({show: true, 'message' : 'Wallet connected successfully'})
-        }catch (error){
+        } catch (error){
             setAlert({show: true, 'message' : (error.code == 4001 ? "Connect wallet to continue" : error.message)})
         }
     }
 
-    const getNetwork = async () => {
-        const network = await getProvider().getNetwork();
-        setNetwork(network);
+    const getConnectedAccount = async () => {   
+        // await socialLoginSDK.logout();
+        if (!socialLoginSDK?.web3auth?.provider) return;
+        
+        const provider = new ethers.providers.Web3Provider(
+            socialLoginSDK.web3auth.provider,
+        );
+        setProvider(provider);
+
+        const accounts = await provider.listAccounts();            
+        setSmartAccount(accounts.length ? accounts[0] : '0x');
     }
     
     const isWalletConnected = () => {
-        return (currentAccount != '0x' && (network.chainId && network.chainId == 137));
+        return (smartAccount != '0x');
     } 
     
-    const getBalance = async () => {
-        const balance = await getProvider().getBalance(currentAccount);
-        setBalance(ethers.utils.formatEther(balance));
+    const getUserInfo = async () => {
+        if (socialLoginSDK && smartAccount) {
+          const userInfo = await socialLoginSDK.getUserInfo();
+          setUserInfo(userInfo);
+          localStorage.setItem('token', userInfo.idToken);
+          localStorage.setItem('profile_image', userInfo.profileImage);
+          localStorage.setItem('name', userInfo.name);
+          console.log("userInfo", userInfo);
+        }
     }
-  
-    useEffect(() => {
-        if(!ethereum) return;
 
-        getNetwork();
-        ethereum.on('accountsChanged', getConnectedAccount);
-        ethereum.on('chainChanged', () => {
-            window.location.reload()
-        })
-        getConnectedAccount()    
-        
-        return () => {
-            if(ethereum) ethereum.off('accountsChanged', getConnectedAccount);
-          }
+    const loadServices = async () => {
+        setServices(await getServices());
+    };
+
+    const logout = async () => {
+        if(socialLoginSDK) {
+            await socialLoginSDK.logout();
+            setSmartAccount('0x');
+        }
+    }
+    
+    useEffect(() => {
+        initSDK();
     }, [])
 
     useEffect(() => {
-        if(!ethereum) return;
-        
+        getConnectedAccount();
+        getUserInfo();
+        loadServices();
+    }, [socialLoginSDK, socialLoginSDK?.web3auth?.provider])
+
+
+    useEffect(() => {
+        if(socialLoginSDK && isWalletConnected()){
+            socialLoginSDK.hideWallet();
+        }
+    }, [socialLoginSDK, smartAccount])
+
+
+
+    useEffect(() => {
         if(!isWalletConnected()){
-            setTasks([]);
-            setBalance(0);
+            setServices([]);
             return;
         }
-
-        getBalance();
-    }, [currentAccount, network])
+    }, [smartAccount])
 
     
     return (
-        <AuthContext.Provider value={{connectToWallet, currentAccount, balance, tasks, network, taskCreateStatus,
-         taskUpdateStatus, setTaskUpdateStatus, setAlert, alert, setTaskDeleteStatus, taskDeleteStatus,
-         setTaskCreateStatus, getProvider, setTasks, setNetwork, setBalance, isWalletConnected, isMember, setIsMember, 
-         mintNftStatus, setMintNftStatus, membershipPrice, setMembershipPrice, membershipTokenId, setMembershipTokenId}}>
+        <EscrowContext.Provider value={{loginWithBiconomy, smartAccount ,setAlert, alert, 
+         isWalletConnected, socialLoginSDK, logout, getUserInfo}}>
             {children}
-        </AuthContext.Provider>
+        </EscrowContext.Provider>
     );
 }
