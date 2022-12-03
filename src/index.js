@@ -9,6 +9,7 @@ import {
 import Login from './containers/Login';
 import Services from './containers/Services';
 import { TransactionProvider } from './context/EscrowContext'
+import CreateService from './containers/CreateService';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/services",
     element: <Services/>,
+  },
+  {
+    path: "/services/new",
+    element: <CreateService/>,
   },
 ]);
 

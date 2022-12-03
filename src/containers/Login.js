@@ -1,5 +1,4 @@
 import logo from '../logo.svg';
-import '../css/App.css';
 
 import { useEffect, useContext } from 'react';
 import { ethers } from "ethers";

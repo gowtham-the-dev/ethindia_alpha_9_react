@@ -76,10 +76,16 @@ export const TransactionProvider = ({children}) => {
         setServices(await getServices());
     };
 
+    const newService = async ({name, description, funds, actionTypes}) => {
+        await createService(name, description, funds, actionTypes);
+        await loadServices();
+    }
+
     const logout = async () => {
         if(socialLoginSDK) {
             await socialLoginSDK.logout();
             setSmartAccount('0x');
+            localStorage.removeItem("token");
         }
     }
     
@@ -112,7 +118,7 @@ export const TransactionProvider = ({children}) => {
     
     return (
         <EscrowContext.Provider value={{loginWithBiconomy, smartAccount ,setAlert, alert, 
-         isWalletConnected, socialLoginSDK, logout, getUserInfo}}>
+         isWalletConnected, socialLoginSDK, logout, getUserInfo, newService}}>
             {children}
         </EscrowContext.Provider>
     );
