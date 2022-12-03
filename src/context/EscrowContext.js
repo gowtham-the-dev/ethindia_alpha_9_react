@@ -75,7 +75,6 @@ export const TransactionProvider = ({children}) => {
 
     const loadServices = async () => {
         let services = await getServices();
-        console.log("s - ", services);        
         setServices(services.data);
     };
 
@@ -122,7 +121,7 @@ export const TransactionProvider = ({children}) => {
 
     
     return (
-        <EscrowContext.Provider value={{loginWithBiconomy, smartAccount ,setAlert, alert, 
+        <EscrowContext.Provider value={{loginWithBiconomy, smartAccount ,setAlert, alert, services,
          isWalletConnected, socialLoginSDK, logout, getUserInfo, newService, createServiceStatus, setCreateServiceStatus}}>
             {children}
         </EscrowContext.Provider>

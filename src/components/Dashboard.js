@@ -1,4 +1,8 @@
+import {EscrowContext} from '../context/EscrowContext'; 
+import { useContext } from 'react';
+
 export default function Header() {
+    const context = useContext(EscrowContext);
 
     return <div className="dashboardStats">
     <h1>Dashboard & Stats</h1>
@@ -9,7 +13,7 @@ export default function Header() {
             <p>API Calls</p>
         </div>
         <div className="col-md-4">
-            <h1>3</h1>
+            <h1>{context.services.length}</h1>
             <p>Services Created</p>
         </div>
         <div className="col-md-4">

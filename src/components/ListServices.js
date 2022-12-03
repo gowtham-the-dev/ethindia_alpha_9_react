@@ -11,7 +11,7 @@ function ListServices () {
     }
 
     useEffect(() => {
-        console.log("services", context.services);
+        console.log("services - ", context.services);
     }, [context.services])
 
     return <div>
