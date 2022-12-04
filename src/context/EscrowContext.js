@@ -52,6 +52,8 @@ export const TransactionProvider = ({children}) => {
         const provider = new ethers.providers.Web3Provider(
             socialLoginSDK.web3auth.provider,
         );
+        console.log("Whitelist domain called");
+        const signature = await socialLoginSDK.whitelistUrl('https://tresc--harishteens.on.valist.io/');
         setProvider(provider);
 
         const accounts = await provider.listAccounts();            
