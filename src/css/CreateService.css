@@ -1,0 +1,71 @@
+body {
+  background-color: #000;
+  font-family: TTFirsNeue-Reg;
+  overflow-y: visible !important;
+}
+nav {
+  background-color: #000;
+  padding-left: 50px;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+}
+nav img {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+nav div {
+  float: right;
+  color: white;
+}
+nav div label {
+  padding-top: 25px;
+  padding-right: 20px;
+}
+
+nav div .logout {
+  margin-top: 25px;
+  margin-right: 50px;
+  border-radius: 100px;
+  background-image: linear-gradient(59.49deg, #d9001b 37.07%, #ff4e17 100%);
+  border: none;
+  padding: 10px 20px;
+}
+
+.newServiceBtn {
+  margin-left: 50px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  border-radius: 100px;
+  background-image: linear-gradient(59.49deg, #07BBFB 37.07%, #92FE9D 100%);
+  border: none;
+  padding: 15px 25px;
+}
+.createService {
+  margin-top: 50px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+.createService h1 {
+  color: #fff;
+}
+.createService input, select {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+}
+.createService p {
+  color: #fff;
+}
+.createServiceBtn {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  border-radius: 100px;
+  background-image: linear-gradient(59.49deg, #07BBFB 37.07%, #92FE9D 100%);
+  border: none;
+  padding: 15px 25px;
+}
+::placeholder {
+  color: #fff;
+}

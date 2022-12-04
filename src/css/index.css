@@ -1,0 +1,11 @@
+@font-face {
+  font-family: TTFirsNeue-Bold;
+  src: url(font/TTFirsNeue-Bold.ttf);
+}
+@font-face {
+  font-family: TTFirsNeue-Reg;
+  src: url(font/TTFirsNeue-Regular.ttf);
+}
+body {
+  overflow-x: hidden;
+}
