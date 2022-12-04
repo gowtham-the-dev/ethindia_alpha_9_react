@@ -7,7 +7,8 @@ export function getToken(){
 export function getServices(){
     const config = {
         headers: { Authorization: `Bearer ${getToken()}` }
-    };    
+    }; 
+    console.log("Token sent - ",  getToken());
     return Api.get('/services', config);
 }
 

@@ -13,7 +13,7 @@ export default function Header() {
             <p>API Calls</p>
         </div>
         <div className="col-md-4">
-            <h1>{context.services.length}</h1>
+            <h1>{context.services.length ?? 0}</h1>
             <p>Services Created</p>
         </div>
         <div className="col-md-4">

@@ -2,17 +2,17 @@ import '../css/CreateService.css';
 import { useEffect, useContext } from 'react';
 import { ethers } from "ethers";
 import {EscrowContext} from '../context/EscrowContext';
-import ListServices from '../components/ListServices';
 import Header from '../components/Header';
-import Dashboard from '../components/Dashboard';
 import CreateService from '../components/CreateService';
+import { useNavigate } from 'react-router-dom';
 
 function Services() {
   const context = useContext(EscrowContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-      console.log("EOA address", context.smartAccount);
-  });
+    if(context.smartAccount == '0x') navigate("/");  
+}, [context.smartAccount])
 
   return (
     <>

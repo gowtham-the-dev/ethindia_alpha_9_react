@@ -4,7 +4,7 @@ import { useContext } from 'react';
 function LogoutButton(){
     const context = useContext(EscrowContext);
 
-    return <button onClick={context.logout}> Logout </button>
+    return <button className='logout' onClick={context.logout}> Logout </button>
 }
 
 export default LogoutButton;

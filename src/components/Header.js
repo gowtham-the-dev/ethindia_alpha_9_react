@@ -12,7 +12,7 @@ export default function Header() {
         {context.socialLoginSDK && context.smartAccount == '0x' && <LoginButton/>}
         {context.socialLoginSDK && context.smartAccount != '0x' && 
         <>
-            <p>Hello, {localStorage.getItem('name')}</p>
+            <label>Hello, {localStorage.getItem('name')} 👋</label>
             <LogoutButton/>
         </>
         }

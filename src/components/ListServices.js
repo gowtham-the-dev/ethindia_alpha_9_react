@@ -10,16 +10,12 @@ function ListServices () {
         navigate("/services/new");
     }
 
-    useEffect(() => {
-        console.log("services - ", context.services);
-    }, [context.services])
-
     return <div>
         <button className="newServiceBtn" onClick={createNewService}>Create A New Service</button>
         <div className="d-containers">
         <div className="row">
             {
-                context.services && context.services.map((service, index) => <Service service={service} key={index}/>)
+                context.services.length > 0 && context.services.map((service, index) => <Service service={service} key={index}/>)
             }
         </div>
         </div>

@@ -1,45 +1,24 @@
-import logo from '../logo.svg';
-
-import { useEffect, useContext } from 'react';
-import { ethers } from "ethers";
+import Header from '../components/Header';
+import '../css/Login.css';
+import { useEffect , useContext} from 'react';
 import {EscrowContext} from '../context/EscrowContext';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const context = useContext(EscrowContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-      console.log("EOA address", context.smartAccount);
-  });
-
-  const login = async () => {
-    if(context.smartAccount == '0x'){
-      context.loginWithBiconomy();
-    }
-  }
-
-  const logout = async () => {
-    if(context.smartAccount != '0x'){
-      context.logout();
-    }
-  }
+      if(context.smartAccount != '0x') navigate("/services");  
+  }, [context.smartAccount])
 
   return (
-    <div className="App">
-      {
-        context.socialLoginSDK && <button 
-        onClick={login}> {context.smartAccount == '0x' ? 'Login' : context.smartAccount}
-        </button>
-      }
-      {
-        context.smartAccount != '0x' && <div>
-          <button onClick={logout}>Logout</button>
-          {localStorage.getItem('name')}
-          <img src={localStorage.getItem('profile_image')}></img>
-        </div>
-      }
-
-      
-    </div>
+    <>
+      <Header/>
+      <div class="ellipseOne"></div>
+      <div class="ellipseTwo"></div>
+      <h1 class="mainTitle">Add A <span class="gradientText"><i>Layer Of Trust</i></span><br/>To Your Business.</h1>
+    </>
   );
 }
 
